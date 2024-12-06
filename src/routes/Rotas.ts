@@ -1,15 +1,11 @@
 import { Router, Response, Request } from "express"
+import { cadastroDoUsuario } from "../controllers/controlerDoUsuario"
 
 const rota = Router()
 
-rota.get('/',(req:Request, res:Response)=>{
-    res.status(200).json({mensagem:'Ola mundo'})
-})
 
-
-rota.post('/login',(req:Request, res:Response)=>{
-    const result = req.body
-    res.status(200).json(result)
+rota.post('/cadastroUsuario', async (req: Request,res: Response)=>{
+    await cadastroDoUsuario(req,res)
 })
 
 export default rota

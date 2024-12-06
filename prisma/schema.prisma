@@ -9,8 +9,25 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
+model Usuario {
+  id        Int       @id @default(autoincrement())
+  nome      String
+  email     String    @unique
+  senha     String
+  cpf       String    @unique
+  endereco  Endereco? // Relacionamento opcional com Endereco
+}
+
+model Endereco {
+  id        Int    @id @default(autoincrement())
+  rua       String
+  cep       String
+  numero    Int
+  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  usuarioId Int    @unique
+}
 

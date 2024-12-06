@@ -23,3 +23,5 @@ no package.json adiciona o
 ### npx prisma generate
 
 ### npm install @prisma/client
+
+### npm i yup
