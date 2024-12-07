@@ -25,3 +25,7 @@ no package.json adiciona o
 ### npm install @prisma/client
 
 ### npm i yup
+
+### npm i bcrypt
+
+### npm i --save-dev @types/bcrypt

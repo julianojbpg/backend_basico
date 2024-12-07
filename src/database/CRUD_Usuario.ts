@@ -3,10 +3,13 @@ import prisma from "./prisma"
 
 
 export async function cadastrarUsuarioNoBanco(usuario: Omit < iUsuario, 'endereco'>){
-    console.log('chegou aqui')
-    // const result = await prisma.usuario.create({
-    //     data: usuario
-    // })
-    // return result
-    return {mensagem:'Chegou no banco os dados', usuario}
+    try {
+        const result = await prisma.usuario.create({
+             data: usuario
+         })
+        return {result, mensagem:'Usuario cadastrado com sucesso!' }
+        
+    } catch (error) {
+        return {error, mensagem:'Usuario não foi cadastrado com sucesso!' }
+    }
 }   

@@ -1,4 +1,5 @@
 import { iUsuario } from "../@types/iUsuario"
+import {hash} from 'bcrypt'
 import * as yup from 'yup'
 
 export async function validacaoCamposDoUsuario(usuario:iUsuario) {
@@ -10,6 +11,6 @@ export async function validacaoCamposDoUsuario(usuario:iUsuario) {
         .min(5, "A senha precisa ter no minimo 5 caracteres"),
         cpf: yup.string().matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'Seu CPF esta invalido')
     })
-
+    usuario.senha = await hash(usuario.senha, 10)
     return await result.validate(usuario,{abortEarly: false})
 }
