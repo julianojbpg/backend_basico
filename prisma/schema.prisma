@@ -25,7 +25,7 @@ model Usuario {
 model Endereco {
   id        Int    @id @default(autoincrement())
   rua       String
-  cep       String
+  cep       String?
   numero    Int
   usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   usuarioId Int    @unique

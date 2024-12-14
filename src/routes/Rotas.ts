@@ -1,11 +1,8 @@
-import { Router, Response, Request } from "express"
-import { cadastroDoUsuario } from "../controllers/controlerDoUsuario"
+import { Router } from "express"
+import rotasDoUsuario from "./rotasDoUsuario"
 
-const rota = Router()
+const rotas = Router()
 
+rotas.use(rotasDoUsuario)
 
-rota.post('/cadastroUsuario', async (req: Request,res: Response)=>{
-    await cadastroDoUsuario(req,res)
-})
-
-export default rota
+export default rotas

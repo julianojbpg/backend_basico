@@ -1,4 +1,4 @@
-import { iUsuario } from "../@types/iUsuario"
+import { iEndereco, iUsuario } from "../@types/iUsuario"
 import prisma from "./prisma"
 
 
@@ -12,4 +12,16 @@ export async function cadastrarUsuarioNoBanco(usuario: Omit < iUsuario, 'enderec
     } catch (error) {
         return {error, mensagem:'Usuario não foi cadastrado com sucesso!' }
     }
-}   
+}  
+
+export async function cadastrarEnderecoNoBanco(endereco: Omit < iEndereco, 'id'>){
+    try {
+        const result = await prisma.endereco.create({
+             data: endereco
+         })
+        return {result, mensagem:'Endereço cadastrado com sucesso!' }
+        
+    } catch (error) {
+        return {error, mensagem:'Endereço não foi cadastrado com sucesso!' }
+    }
+}

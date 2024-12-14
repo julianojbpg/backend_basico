@@ -15,7 +15,7 @@ CREATE TABLE `Usuario` (
 CREATE TABLE `Endereco` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `rua` VARCHAR(191) NOT NULL,
-    `cep` VARCHAR(191) NOT NULL,
+    `cep` VARCHAR(191) NULL,
     `numero` INTEGER NOT NULL,
     `usuarioId` INTEGER NOT NULL,
 
