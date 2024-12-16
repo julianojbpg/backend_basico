@@ -3,11 +3,12 @@ import { validacaoCamposDoEndereco, validacaoCamposDoUsuario } from '../validati
 import * as yup from 'yup'
 import { cadastrarEnderecoNoBanco, cadastrarUsuarioNoBanco } from '../database/CRUD_Usuario'
 import { iEndereco, iUsuario } from '../@types/iUsuario'
-
+import { hash } from 'bcrypt'
 
 export async function cadastroDoUsuario(req: Request, res: Response) {
     try {
         const usuario = await validacaoCamposDoUsuario(req.body) as iUsuario
+        usuario.senha = await hash(usuario.senha, 10)
         const result = await cadastrarUsuarioNoBanco(usuario)
         return res.status(200).json(result)
     }
