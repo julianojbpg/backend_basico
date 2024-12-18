@@ -1,5 +1,5 @@
 import { Router, Response, Request } from "express"
-import { buscarUsuario, cadastroDoEnderecoUsuario, cadastroDoUsuario } from "../controllers/controllerDoUsuario"
+import { buscarUsuarioPorEmailOuCPF, cadastroDoEnderecoUsuario, cadastroDoUsuario } from "../controllers/controllerDoUsuario"
 
 const rotasDoUsuario = Router()
 
@@ -13,7 +13,7 @@ rotasDoUsuario.post('/cadastroEnderecoUsuario', async (req: Request,res: Respons
 
 // rotas de busca
 rotasDoUsuario.post('/buscarUsuario', async (req: Request,res: Response)=>{
-    await buscarUsuario(req, res)
+    await buscarUsuarioPorEmailOuCPF(req, res)
 })
 
 export default rotasDoUsuario

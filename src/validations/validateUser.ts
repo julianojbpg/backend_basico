@@ -1,5 +1,4 @@
 import { iEndereco, iUsuario } from "../@types/iUsuario"
-import { hash } from 'bcrypt'
 import * as yup from 'yup'
 
 export async function validacaoCamposDoUsuario(usuario: iUsuario) {
@@ -24,4 +23,25 @@ export async function validacaoCamposDoEndereco(endereco: iEndereco) {
         usuarioId: yup.number().required()
     })
     return await result.validate(endereco, { abortEarly: false })
+}
+
+function validacaoCPFouEmail(obj:Object){
+    // Verifica se o objeto não é nulo e é do tipo 'object'
+    if (obj && typeof obj === 'object') {
+        // Verifica se o objeto tem as propriedades 'cpf' ou 'email'
+        return 'cpf' in obj || 'email' in obj
+    }else
+        return false // Retorna false se não for um objeto válido
+}
+
+export async function validacaoCampoCPFouEmail(obj:Object){
+    const validacao = validacaoCPFouEmail(obj)
+    if(validacao){
+        const result = yup.object({
+            email: yup.string().matches(/^[^\d\s@][^\s@]*@[^\s@.]+(\.[^\s@.]+)*\.[a-zA-Z]{2,3}$/, 'Email ínvalido!'),
+            cpf: yup.string().matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'Seu CPF esta invalido')
+        })
+        return await result.validate(obj, { abortEarly: false })
+    }
+    return null
 }

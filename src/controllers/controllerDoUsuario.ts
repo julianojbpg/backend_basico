@@ -1,9 +1,20 @@
 import { Request, Response } from 'express'
-import { validacaoCamposDoEndereco, validacaoCamposDoUsuario } from '../validations/validateUser'
-import * as yup from 'yup'
-import { buscarUsuarioNoBanco, cadastrarEnderecoNoBanco, cadastrarUsuarioNoBanco } from '../database/CRUD_Usuario'
 import { iEndereco, iUsuario } from '../@types/iUsuario'
 import { hash } from 'bcrypt'
+
+import { 
+    validacaoCampoCPFouEmail, 
+    validacaoCamposDoEndereco, 
+    validacaoCamposDoUsuario 
+} from '../validations/validateUser'
+
+import * as yup from 'yup'
+import { 
+    buscarUsuarioNoBanco, 
+    cadastrarEnderecoNoBanco, 
+    cadastrarUsuarioNoBanco 
+} from '../database/CRUD_Usuario'
+
 
 
 // Cerate
@@ -16,8 +27,8 @@ export async function cadastroDoUsuario(req: Request, res: Response) {
     }
     catch (error) {
         if (error instanceof yup.ValidationError)
-            return res.status(200).json(error.errors)
-        return res.status(200).json(error)
+            return res.status(200).json({ status: false, mensagem: error.errors })
+        return res.status(200).json({ status: false, mensagem: error })
     }
 }
 
@@ -29,18 +40,26 @@ export async function cadastroDoEnderecoUsuario(req: Request, res: Response) {
     }
     catch (error) {
         if (error instanceof yup.ValidationError)
-            return res.status(200).json(error.errors)
-        return res.status(200).json(error)
+            return res.status(200).json({ status: false, mensagem: error.errors })
+        return res.status(200).json({ status: false, mensagem: error })
     }
 }
 // Read
-export async function buscarUsuario(req: Request, res: Response){
-    const {cpf,email} = req.body
-    try {
-        const result = await buscarUsuarioNoBanco(email, cpf)
-        return res.status(200).json(result)
+export async function buscarUsuarioPorEmailOuCPF(req: Request, res: Response) {
 
-    } catch (error) {
-        return res.status(200).json({mensagem: error})
-    }  
+    const status = await validacaoCampoCPFouEmail(req.body)
+    const { cpf, email } = req.body
+
+    if (status) {
+
+        try {
+            const result = await buscarUsuarioNoBanco(email, cpf)
+            return res.status(200).json(result)
+        } catch (error) {
+            return res.status(200).json({ status: false, mensagem: error })
+        }
+
+    } else {
+        return res.status(400).json({ status: false, mensagem: 'Não foi encontrado as proriedades email ou cpf para buscar no servidor' })
+    }
 }
