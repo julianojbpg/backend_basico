@@ -27,12 +27,17 @@ export async function cadastrarEnderecoNoBanco(endereco: Omit<iEndereco, 'id'>):
     }
 }
 // Delete
-async function deletarUsuarioNoBanco(id: number) {
-    const result = await prisma.usuario.delete({
-        where: {
-            id
-        }
-    })
+export async function deletarUsuarioNoBanco(id: number): Promise<iStatus> {
+    try {   
+        await prisma.usuario.delete({
+            where: {
+                id
+            }
+        })
+        return { status: true, mensagem: 'Usuario Deletado com sucesso' }
+    } catch (error) {
+        return { status: false, mensagem: `Erro ao deletar o usuario no banco` }
+    }
 }
 
 // Read
@@ -41,14 +46,36 @@ export async function buscarUsuarioNoBanco(email?: string, cpf?: string): Promis
     if (!email && !cpf) {
         return { status: false, mensagem: 'erro nos parametros' }
     }
-    
-    const result = await prisma.usuario.findFirst({
-        where: {
-            OR: [
-                { email },
-                { cpf }
-            ].filter(Boolean)
-        }
-    })
-    return { status: true, valor: result, mensagem: 'Usuario encontrado com sucesso!' }
+    try {
+        const result = await prisma.usuario.findFirst({
+            where: {
+                OR: [
+                    { email },
+                    { cpf }
+                ].filter(Boolean)
+            }
+        })
+        return { status: true, valor: result, mensagem: 'Usuario encontrado com sucesso!' }    
+    } catch (error) {
+        return { status: false, mensagem: error }
+    }
+}
+// Update
+
+export async function atualizarUsuarioNoBanco(usuario:iUsuario): Promise<iStatus> {
+    const {id , nome, senha} = usuario
+    try {
+        await prisma.usuario.update({
+            where:{
+                id
+            },
+            data:{
+                nome,
+                senha
+            }
+        })
+        return { status: true, mensagem: 'O usuario foi atualizado com sucesso!' }
+    } catch (error) {
+        return { status: true, mensagem: 'O usuario não foi atualizado com sucesso!' }
+    }
 }

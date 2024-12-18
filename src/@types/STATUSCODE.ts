@@ -1,0 +1,5 @@
+export enum STATUSCODE{
+    OK = 200,
+    BADREQUEST = 400,
+    INTERNAL_SERVER_ERROR = 500
+}
