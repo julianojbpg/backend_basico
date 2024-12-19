@@ -60,6 +60,15 @@ export async function buscarUsuarioNoBanco(email?: string, cpf?: string): Promis
         return { status: false, mensagem: error }
     }
 }
+
+export async function buscarTodosUsuariosNoBanco() {
+    try {
+        const result = await prisma.usuario.findMany()
+        return { status: true, valor: result, mensagem: 'Todos os usuarios encontrados com sucesso!' }
+    } catch (error) {
+        return { status: false, mensagem: 'erro ao encontrar todos os usuarios!' }
+    }
+}
 // Update
 
 export async function atualizarUsuarioNoBanco(usuario:iUsuario): Promise<iStatus> {
@@ -77,5 +86,18 @@ export async function atualizarUsuarioNoBanco(usuario:iUsuario): Promise<iStatus
         return { status: true, mensagem: 'O usuario foi atualizado com sucesso!' }
     } catch (error) {
         return { status: true, mensagem: 'O usuario não foi atualizado com sucesso!' }
+    }
+}
+
+export async function deletarEnderecoNoBanco(usuarioId: number): Promise<iStatus> {
+    try {
+        await prisma.endereco.delete({
+           where:{
+                usuarioId
+           }
+        })
+        return { status: true, mensagem: 'O endreço foi deletado com sucesso!' }
+    } catch (error) {
+        return { status: true, mensagem: 'O endereço não foi deletado com sucesso!' }
     }
 }

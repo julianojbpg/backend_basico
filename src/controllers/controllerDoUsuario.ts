@@ -14,9 +14,11 @@ import {
 import * as yup from 'yup'
 import {
     atualizarUsuarioNoBanco,
+    buscarTodosUsuariosNoBanco,
     buscarUsuarioNoBanco,
     cadastrarEnderecoNoBanco,
     cadastrarUsuarioNoBanco,
+    deletarEnderecoNoBanco,
     deletarUsuarioNoBanco
 } from '../database/CRUD_Usuario'
 
@@ -86,12 +88,29 @@ export async function buscarUsuarioPorEmailOuCPF(req: Request, res: Response) {
         })
     }
 }
+
+export async function buscarTodosUsuarios(req: Request, res: Response) {
+    try {
+        const {mensagem, valor} = await buscarTodosUsuariosNoBanco()
+        return res.status(STATUSCODE.OK).json({
+            status: true,
+            valor: valor,
+            mensagem: mensagem
+        })
+    } catch (error) {
+        return res.status(STATUSCODE.INTERNAL_SERVER_ERROR).json({
+            status: false,
+            mensagem: error
+        })
+    }
+}
 // Delete
 
 export async function deletarUsuarioPorID(req: Request, res: Response) {
     const validacao = await validar_Id_Usuario(req.body)
     if (validacao) {
         try {
+            await deletarEnderecoNoBanco(req.body.id)
             const result = await deletarUsuarioNoBanco(req.body.id)
             return res.status(STATUSCODE.OK).json(result)
 
@@ -112,6 +131,7 @@ export async function deletarUsuarioPorID(req: Request, res: Response) {
         mensagem: 'O id não foi encontrado'
     })
 }
+
 
 //Update
 

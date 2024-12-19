@@ -66,7 +66,7 @@ export async function validar_Id_Usuario(obj: Object) {
     return null
 }
 
-function validacao_De_Atulizacao_Do_Usuario(obj: Object) {
+function validacao_De_Atualizacao_Do_Usuario(obj: Object) {
     // Verifica se o objeto não é nulo e é do tipo 'object'
     if (obj && typeof obj === 'object') {
         return 'id' in obj && ('nome' in obj || 'senha' in obj)
@@ -75,7 +75,7 @@ function validacao_De_Atulizacao_Do_Usuario(obj: Object) {
 }
 
 export async function validar_Atualizacao_Usuario(obj: Object) {
-    const validacao = validacao_De_Atulizacao_Do_Usuario(obj)
+    const validacao = validacao_De_Atualizacao_Do_Usuario(obj)
     if (validacao) {
         const result = yup.object({
             nome: yup.string().required('É obrigatorio preencher o campo nome!').min(3, 'Precisa de no minimo 3 caracteres no nome.'),
@@ -87,6 +87,7 @@ export async function validar_Atualizacao_Usuario(obj: Object) {
         })
         return await result.validate(obj)
     }
-    console.log('chegou aqui')
     return null
 }
+
+
